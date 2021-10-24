@@ -1,89 +1,101 @@
-import React, { Fragment, useState } from "react";
-import { Bar, BarContainer } from "../style/styled";
-import bubbleSort from "../algorithms/bubbleSort";
+import React, { Fragment, useEffect, useState } from "react";
+import { Bar } from "../style/styled";
+import Controller from "./Controller";
+// helpers
+import { algoMapping } from "../helpers/algoSelector";
+import getWidth from "../helpers/getWidth";
 import swap from "../helpers/swap";
+import colorPicker from "../helpers/colorPicker";
 import generateArray from "../helpers/generate-array";
 import sortingCompletedAnimation from "../helpers/animations";
 
-// Color Variables
-const NORMAL_COLOR = "#1DA1F2";
-const COMPARING_COLOR = "#FFFC00";
-const SORTED_COLOR = "#25D366";
-
-// Variables
-const LENGTH_OF_ARRAY = 30;
-const TIMEOUT_DELAY = 1000;
-
 const Visualizer = () => {
-  const initialState = generateArray(LENGTH_OF_ARRAY);
+  const [arrayLength, setArrayLength] = useState(20);
+  const initialState = generateArray(arrayLength);
+  const [algorithm, setAlgorithm] = useState("Bubble Sort")
+  const [speed, setSpeed] = useState(100);
   const [array, setArray] = useState(initialState);
+
   const [comparasions, setComparisions] = useState([]);
+  const [swapping, setSwapping] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
   const [sortedArr, setSortedArr] = useState([]);
 
-  const onClickHandler = () => {
-    if (isSorting) {
-      return
-    }
-    setArray(generateArray(LENGTH_OF_ARRAY));
+  useEffect(() => {
     setSortedArr([])
+    setArray(generateArray(arrayLength));
+  }, [arrayLength]);
+
+  const onRandomizeClickHandler = () => {
+    if (isSorting) {
+      return;
+    }
+    setArray(generateArray(arrayLength));
+    setSortedArr([]);
   };
 
-  const bubbleSortClickHandler = () => {
+  const onStartClick = () => {
     if (isSorting) {
       return;
     }
     setIsSorting(true);
-    const animations = bubbleSort(array);
+    const animations = algoMapping[algorithm](array);
     animations.forEach(([comparision, swapped, isSorted], idx) => {
       setTimeout(() => {
         if (isSorted !== null) {
           setSortedArr((prev) => {
-            return [...prev, isSorted]
+            return [...prev, isSorted];
           });
         }
         if (swapped === true) {
           let [i, j] = comparision;
-          setComparisions([i, j]);
+          setComparisions([]);
+          setSwapping([i, j]);
           swap(array, i, j);
           setArray(array);
         } else if (swapped === false) {
           let [i, j] = comparision;
+          setSwapping([]);
           setComparisions([i, j]);
         }
-      }, TIMEOUT_DELAY * idx);
+      }, speed * idx);
     });
 
     setTimeout(() => {
-      console.log(sortedArr)
       setComparisions([]);
+      setSwapping([]);
       setIsSorting(false);
-      sortingCompletedAnimation(array,setSortedArr)
-    }, TIMEOUT_DELAY * animations.length);
+      sortingCompletedAnimation(array, setSortedArr);
+    }, speed * animations.length);
   };
 
   return (
     <Fragment>
-      <BarContainer>
+      <div className="w-full flex flex-row justify-center h-[420px]">
         {array &&
           array.map((value, idx) => {
             return (
               <Bar
                 height={value}
                 key={idx}
-                color={
-                  comparasions.includes(idx)
-                    ? COMPARING_COLOR
-                    : sortedArr.includes(idx)
-                    ? SORTED_COLOR
-                    : NORMAL_COLOR
-                }
+                color={colorPicker(idx, comparasions, swapping, sortedArr)}
+                width={getWidth(arrayLength)}
               />
             );
           })}
-      </BarContainer>
-      <button onClick={onClickHandler}>Show Bars</button>
-      <button onClick={bubbleSortClickHandler}>Bubble Sort</button>
+      </div>
+
+      <Controller
+        arrayLength={arrayLength}
+        setArrayLength={setArrayLength}
+        onRandomizeClickHandler={onRandomizeClickHandler}
+        setSpeed={setSpeed}
+        setAlgorithm={setAlgorithm}
+        isSorting={isSorting}
+        onStartClick={onStartClick}
+      />
+
+      
     </Fragment>
   );
 };

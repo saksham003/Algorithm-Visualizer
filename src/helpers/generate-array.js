@@ -1,5 +1,5 @@
-const MIN_ARRAY_NUM = 50;
-const MAX_ARRAY_NUM = 200;
+const MIN_ARRAY_NUM = 10;
+const MAX_ARRAY_NUM = 400;
 
 function generateNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
