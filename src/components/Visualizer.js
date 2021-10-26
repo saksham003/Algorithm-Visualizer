@@ -12,7 +12,7 @@ import sortingCompletedAnimation from "../helpers/animations";
 const Visualizer = () => {
   const [arrayLength, setArrayLength] = useState(20);
   const initialState = generateArray(arrayLength);
-  const [algorithm, setAlgorithm] = useState("Bubble Sort")
+  const [algorithm, setAlgorithm] = useState("Bubble Sort");
   const [speed, setSpeed] = useState(100);
   const [array, setArray] = useState(initialState);
 
@@ -22,7 +22,7 @@ const Visualizer = () => {
   const [sortedArr, setSortedArr] = useState([]);
 
   useEffect(() => {
-    setSortedArr([])
+    setSortedArr([]);
     setArray(generateArray(arrayLength));
   }, [arrayLength]);
 
@@ -40,6 +40,7 @@ const Visualizer = () => {
     }
     setIsSorting(true);
     const animations = algoMapping[algorithm](array);
+
     animations.forEach(([comparision, swapped, isSorted], idx) => {
       setTimeout(() => {
         if (isSorted !== null) {
@@ -49,9 +50,18 @@ const Visualizer = () => {
         }
         if (swapped === true) {
           let [i, j] = comparision;
+
+          if (algorithm === "Insertion Sort") {
+            setSwapping([j]);
+          } 
+          else if (algorithm === "Merge Sort"){
+            setSwapping([i,j])
+          }
+          else {
+            setSwapping([i, j]);
+          }
           setComparisions([]);
-          setSwapping([i, j]);
-          swap(array, i, j);
+          (algorithm === "Merge Sort") ? array[i] = j :swap(array, i, j);
           setArray(array);
         } else if (swapped === false) {
           let [i, j] = comparision;
@@ -94,8 +104,6 @@ const Visualizer = () => {
         isSorting={isSorting}
         onStartClick={onStartClick}
       />
-
-      
     </Fragment>
   );
 };

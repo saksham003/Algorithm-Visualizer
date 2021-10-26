@@ -4,7 +4,7 @@ const sortingCompletedAnimation = (array, coloringFunc) => {
         coloringFunc((prev) => {
             return [...prev,idx]
         })
-    }, 50 * idx);
+    }, 30 * idx);
   });
 };
 
