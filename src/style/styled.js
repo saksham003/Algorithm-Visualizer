@@ -7,7 +7,7 @@ const Bar = styled.div`
   height: ${(props) => props.height}px;
   background-color: ${(props) => props.color};
   display: inline-block;
-  margin: auto 2px;
+  margin: auto 1px;
   margin-bottom: 0;
   color: white;
 `;

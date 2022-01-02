@@ -15,7 +15,7 @@ const DropDown = ({ label, array, getSelected }) => {
       <select
         className="p-2 border border-double bg-gray-100 
         focus:outline-none focus:ring-2 ring-gray-300 dark:ring-gray-500
-        dark:bg-gray-600 dark:border-gray-500"
+        dark:bg-gray-600 dark:border-gray-500 transition-{background-color} duration-500"
         name={label}
         id={label}
         onChange={onSelectChange}

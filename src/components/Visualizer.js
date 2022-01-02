@@ -53,10 +53,8 @@ const Visualizer = () => {
 
           if (algorithm === "Insertion Sort") {
             setSwapping([j]);
+            setComparisions([i]);
           } 
-          else if (algorithm === "Merge Sort"){
-            setSwapping([i,j])
-          }
           else {
             setSwapping([i, j]);
           }

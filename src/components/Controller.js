@@ -3,6 +3,7 @@ import DropDown from "./utility/DropDown";
 import Slider from "./utility/Slider";
 import { speeds, speedSetter } from "../helpers/speedSetter";
 import { algoMapping } from "../helpers/algoSelector";
+import Info from "./Info";
 
 const Controller = ({
   arrayLength,
@@ -17,8 +18,8 @@ const Controller = ({
   const [selectedAlgo, setSelectedAlgo] = useState("Bubble Sort");
 
   useEffect(() => {
-    setAlgorithm(selectedAlgo)
-  }, [selectedAlgo, setAlgorithm])
+    setAlgorithm(selectedAlgo);
+  }, [selectedAlgo, setAlgorithm]);
 
   useEffect(() => {
     setSpeed(speedSetter[selectedSpeed]);
@@ -30,40 +31,48 @@ const Controller = ({
   };
 
   return (
-    <div
-      className="w-screen py-3 px-16 flex justify-evenly items-center bg-gray-50 
-    dark:bg-gray-700 dark:text-gray-100"
-    >
-      <button
-        className=" text-gray-500 hover:text-gray-400 text-xl dark:text-gray-300"
-        onClick={onRandomizeClickHandler}
-        title="Randomize"
-        disabled={isSorting}
+    <React.Fragment>
+      <div
+        className="w-screen py-3 px-16 flex justify-evenly items-center bg-gray-50 
+    dark:bg-gray-700 dark:text-gray-100 transition-{background-color} duration-500 "
       >
-        <i className="fas fa-random"></i>
-      </button>
+        <button
+          className=" text-gray-500 hover:text-gray-400 text-xl dark:text-gray-300"
+          onClick={onRandomizeClickHandler}
+          title="Randomize"
+          disabled={isSorting}
+        >
+          <i className="fas fa-random"></i>
+        </button>
 
-      <DropDown
-        label={"Select Algorithm:"}
-        array={Object.keys(algoMapping)}
-        getSelected={setSelectedAlgo}
-      />
-      <Slider
-        label={"Array Size:"}
-        value={arrayLength}
-        onRangeChange={onRangeChange}
-        min={"10"}
-        max={"100"}
-        isDisabled={isSorting}
-      />
-      <DropDown label={"Speed"} array={speeds} getSelected={setSelectedSpeed} />
-      <button
-        className="py-2 px-8 bg-gray-200 dark:bg-gray-500 dark:text-gray-100"
-        onClick={onStartClick}
-      >
-        Start
-      </button>
-    </div>
+        <DropDown
+          label={"Select Algorithm:"}
+          array={Object.keys(algoMapping)}
+          getSelected={setSelectedAlgo}
+        />
+        <Slider
+          label={"Array Size:"}
+          value={arrayLength}
+          onRangeChange={onRangeChange}
+          min={"10"}
+          max={"100"}
+          isDisabled={isSorting}
+        />
+        <DropDown
+          label={"Speed"}
+          array={speeds}
+          getSelected={setSelectedSpeed}
+        />
+        <button
+          className="py-2 px-8 bg-gray-200 dark:bg-gray-500 dark:text-gray-100
+          transition-{background-color} duration-500"
+          onClick={onStartClick}
+        >
+          Start
+        </button>
+      </div>
+      <Info/>
+    </React.Fragment>
   );
 };
 
